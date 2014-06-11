@@ -172,26 +172,28 @@
 
                            // Fill simple fields 
                            var fieldsMap = {
-                              'firstname': profile.profilePersonalInformation.firstName,
-                              'lastname': profile.profilePersonalInformation.lastName,
-                              'zipcode': profile.profilePersonalInformation.zipcode,
-                              'city': profile.profilePersonalInformation.city,
-                              'country': profile.profilePersonalInformation.country,
-                              'email': profile.profilePersonalInformation.emailAddress,
-                              'phone': profile.profilePersonalInformation.phoneNumber,
-                              'gender': profile.profilePersonalInformation.gender
+                              'firstname': 'firstName',
+                              'lastname': 'lastName',
+                              'zipcode': 'zipcode',
+                              'city': 'city',
+                              'country': 'country',
+                              'email': 'emailAddress',
+                              'phone': 'phoneNumber',
+                              'gender': 'gender'
                            };
                            for (var property in fieldsMap) {
                                if (fieldsMap.hasOwnProperty(property)) {
-                                   if ((fieldsMap[property] != undefined) && (fieldsMap[property] != "")) {
-                                       $('#' + property).val(fieldsMap[property]);
+                                   var value = profile.profilePersonalInformation[fieldsMap[property]];
+                                   if ((value != undefined) && (value != "")) {
+                                       $('#' + property).val(value);
                                    }
                                }
                            }
 
                            // Fill position
                            if (profile.experienceExts[0] != undefined) {
-                               $('#position').val(profile.experienceExts[0].positionTitle + ' at ' + profile.experienceExts[0].companyName);
+                               var exp = profile.experienceExts[0];
+                               $('#position').val(exp.positionTitle + ' at ' + exp.companyName);
                            }
 
                            // Tags-style fields
