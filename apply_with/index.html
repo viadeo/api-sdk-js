@@ -1,0 +1,246 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>Sample page for Viadeo apply-with embedding</title>
+
+        <!-- bootstrap libs for sample form -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="lib/bootstrap-tagsinput.css">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="lib/bootstrap-tagsinput.min.js"></script>
+
+        <!-- Current Viadeo API JS SDK -->
+        <script src="../viadeoapi.js"></script>
+
+        <!-- styles -->
+        <style>
+            #form {
+                width: 800px;
+                margin-left: 100px;
+                margin-top: 20px;
+            }
+            legend {
+                font-size: 30px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+
+        <form id="form" class="well form-horizontal">
+            <fieldset>
+
+                <!-- Form Name -->
+                <legend>Create my simple CV</legend>
+
+                <!-- Button -->
+                <img src="img/connectwithviadeo.png" alt="Connect with Viadeo" title="Connect with Viadeo" id="oauth" />
+
+                <br/><br/>
+
+                <!-- Select Basic -->
+                <div class="control-group">
+                  <label class="control-label" for="gender">Gender</label>
+                  <div class="col-cs-10">
+                    <select id="gender" name="gender" >
+                      <option value="2">Male</option>
+                      <option value="1">Female</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="firstname">Firstname</label>
+                  <div class="col-cs-10">
+                    <input id="firstname" name="firstname" type="text" placeholder="Enter your firstname..." class="form-control">
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="lastname">Lastname</label>
+                  <div class="col-cs-10">
+                    <input id="lastname" name="lastname" type="text" placeholder="Enter your lastname..." class="form-control" >
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="zipcode">Zip code</label>
+                  <div class="col-cs-10">
+                    <input id="zipcode" name="zipcode" type="text" placeholder="Enter your city's zipcode" class="form-control">
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="city">City</label>
+                  <div class="col-cs-10">
+                    <input id="city" name="city" type="text" placeholder="Enter your city's name" class="form-control">
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="country">Country</label>
+                  <div class="col-cs-10">
+                    <input id="country" name="country" type="text" placeholder="Enter your country..." class="form-control">
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="email">Email</label>
+                  <div class="col-cs-10">
+                    <input id="email" name="email" type="text" placeholder="Enter your email..." class="form-control">
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="phone">Phone number</label>
+                  <div class="col-cs-10">
+                    <input id="phone" name="phone" type="text" placeholder="Enter your phone number..." class="form-control">
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="languages">Languages</label>
+                  <div class="col-cs-10">
+                    <select multiple id="languages" name="languages" type="text" value="" data-role="tagsinput" placeholder="Add language..." class="form-control">
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="position">Position</label>
+                  <div class="col-cs-10">
+                    <input id="position" name="position" type="text" placeholder="Enter your current position..." class="form-control">
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="schools">Schools</label>
+                  <div class="col-cs-10">
+                    <select multiple id="schools" name="schools" type="text" value="" data-role="tagsinput" placeholder="Add school..." class="form-control">
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="control-group">
+                  <label class="control-label" for="schools">Skills</label>
+                  <div class="col-cs-10">
+                    <select multiple id="skills" name="skills" type="text" value="" data-role="tagsinput" placeholder="Add skill..." class="form-control">
+                    </select>
+                  </div>
+                </div>
+               
+
+                <!-- Button (Double) -->
+                <div class="control-group">
+                  <label class="control-label" for="validateButton"></label>
+                  <div class="col-cs-10">
+                    <button id="validateButton" name="validateButton" class="btn btn-success">Register me !</button>
+                    <button id="cancelButton" name="cancelButton" class="btn btn-danger">Reset</button>
+                  </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+        <script>
+            <!--
+                $(function() {                
+
+                    VD.init({  
+                        apiKey: '<You API key here>',  
+                        status: true,
+                        cookie: true
+                    });  
+
+                    function fillForm() {
+                        VD.api("/profile", function(profile) {
+                           console.log(profile); 
+
+                           // Fill simple fields 
+                           var fieldsMap = {
+                              'firstname': profile.profilePersonalInformation.firstName,
+                              'lastname': profile.profilePersonalInformation.lastName,
+                              'zipcode': profile.profilePersonalInformation.zipcode,
+                              'city': profile.profilePersonalInformation.city,
+                              'country': profile.profilePersonalInformation.country,
+                              'email': profile.profilePersonalInformation.emailAddress,
+                              'phone': profile.profilePersonalInformation.phoneNumber,
+                              'gender': profile.profilePersonalInformation.gender
+                           };
+                           for (var property in fieldsMap) {
+                               if (fieldsMap.hasOwnProperty(property)) {
+                                   if ((fieldsMap[property] != undefined) && (fieldsMap[property] != "")) {
+                                       $('#' + property).val(fieldsMap[property]);
+                                   }
+                               }
+                           }
+
+                           // Fill position
+                           if (profile.experienceExts[0] != undefined) {
+                               $('#position').val(profile.experienceExts[0].positionTitle + ' at ' + profile.experienceExts[0].companyName);
+                           }
+
+                           // Tags-style fields
+                           var tagsMap = {
+                                'languages': {
+                                    'level1': 'spokenLanguageExts',
+                                    'level2': 'language'
+                                },
+                                'skills': {
+                                    'level1': 'skillExts',
+                                    'level2': 'skill'
+                                },
+                                'schools': {
+                                    'level1': 'educationExts',
+                                    'level2': 'schoolName'
+                                }
+                           };
+
+                           for (var property in tagsMap) {
+                               if (tagsMap.hasOwnProperty(property)) {
+                                   var tagDef = tagsMap[property];
+                                   for (var tag in profile[tagDef.level1]) {
+                                       tag = profile[tagDef.level1][tag];
+                                       var tagVal = tag[tagDef.level2];
+                                       $('#' + property).tagsinput('add', tagVal);
+                                   }
+                               }
+                           }
+
+                        });
+                    }
+                    
+                    $('#oauth').click(function(){  
+                        VD.getLoginStatus(function(r) {  
+                            if (!r.session) {  
+                                VD.login(function(r) {  
+                                    if(r.session){  
+                                        fillForm();
+                                    }  
+                                });  
+                            } else {  
+                                fillForm();
+                            }  
+                        });  
+                    });
+
+                });
+            -->
+        </script>
+
+    </body>
+</html>

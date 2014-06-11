@@ -227,9 +227,17 @@ var VD_CONFIG = module.exports = {
         return {
             api: {
                 oauth_uri: 'https://secure.viadeo.com',
+                //oauth_uri: 'https://www01.demo.sf.viadeo.internal',
                 oauth_token_path: '/oauth-provider/token',
                 oauth_authorize_path: '/oauth-provider/authorize2',
-                api_uri: 'https://api.viadeo.com/',
+                api_uri: function(path) {
+                    var uri = 'https://api.viadeo.com/';
+                    if (path && path == "profile") {
+                        uri = 'https://partners-api.viadeo.com/';
+                        // uri = 'http://extapi01.demo.sf.viadeo.internal:8080/';
+                    }
+                    return uri;
+                }
             },
         } 
     }
@@ -2024,7 +2032,7 @@ var apimodule_network = function (VD) {
                 }
                 params.jsonp = 'VD.ApiServer._callbacks.' + g;
         
-                var url = (VD.ApiServer.endpoint + path + (path.indexOf('?') > -1 ? '&' : '?') + VD.QS.encode(params));
+                var url = (VD.ApiServer.endpoint(path) + path + (path.indexOf('?') > -1 ? '&' : '?') + VD.QS.encode(params));
                 if (url.length > 2000) {
                     throw new Error('JSONP only support a maximum of 2000 bytes of input.');
                 }
@@ -2234,17 +2242,19 @@ var apimodule_api = function (VD) {
         // --------------------------------------------------------------------
 
         /**
-         * Sets the API ase url
+         * Sets the API base url
          *
          * setUrl('http://....');
          * setUrl() default to configuration
          *
          */
-        setUrl: function(url) {
-            url = url || config_endpoint;
-
+        setUrl: function(user_url) {
+            var url = config_endpoint;
+            if (user_url) {
+                url = function() { return user_url }
+            }
             var regexp   = /^(https?):\/\/([^\/:]+)(:([0-9]+))?\/?$/;
-            var matches  = regexp.exec(url);
+            var matches  = regexp.exec(url());
 
             VD.ApiServer.proto    = matches[1];
             try {
