@@ -226,15 +226,15 @@ var VD_CONFIG = module.exports = {
     get: function() { 
         return {
             api: {
-                oauth_uri: 'https://secure.viadeo.com',
-                //oauth_uri: 'https://www01.demo.sf.viadeo.internal',
+                //oauth_uri: 'https://secure.viadeo.com',
+                oauth_uri: 'https://www01.demo.sf.viadeo.internal',
                 oauth_token_path: '/oauth-provider/token',
                 oauth_authorize_path: '/oauth-provider/authorize2',
                 api_uri: function(path) {
                     var uri = 'https://api.viadeo.com/';
                     if (path && path == "profile") {
-                        uri = 'https://partners-api.viadeo.com/';
-                        // uri = 'http://extapi01.demo.sf.viadeo.internal:8080/';
+                        //uri = 'https://partners-api.viadeo.com/';
+                         uri = 'http://extapi01.demo.sf.viadeo.internal:8080/';
                     }
                     return uri;
                 }
